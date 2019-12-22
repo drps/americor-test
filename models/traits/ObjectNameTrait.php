@@ -88,7 +88,7 @@ trait ObjectNameTrait
      */
     public static function getObjectName($model)
     {
-        return self::getObjectByClassName($model::class);
+        return self::getObjectByClassName(get_class($model));
     }
 
     /**
