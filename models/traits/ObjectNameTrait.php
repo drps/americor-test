@@ -11,6 +11,14 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
+/**
+ * @property Call $call
+ * @property Customer $customer
+ * @property Sms $sms
+ * @property Task $task
+ * @property Fax $fax
+ * @property User $user
+ */
 trait ObjectNameTrait
 {
     public static $classes = [
@@ -80,7 +88,7 @@ trait ObjectNameTrait
      */
     public static function getObjectName($model)
     {
-        return self::getObjectByClassName($model::className());
+        return self::getObjectByClassName($model::class);
     }
 
     /**

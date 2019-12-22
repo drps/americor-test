@@ -5,12 +5,11 @@
  * @var $model \app\models\History
  * @var $dataProvider yii\data\ActiveDataProvider
  * @var $exportType string
+ * @var $itemRenderer \app\components\HistoryItemRenderer
  */
 
 use app\models\History;
-use app\models\Task;
 use app\widgets\Export\Export;
-use app\widgets\HistoryList\helpers\HistoryListHelper;
 
 $filename = 'history';
 $filename .= '-' . time();
@@ -47,8 +46,8 @@ ini_set('memory_limit', '2048M');
         ],
         [
             'label' => Yii::t('app', 'Message'),
-            'value' => function (History $model) {
-                return strip_tags(HistoryListHelper::getBodyByModel($model));
+            'value' => function (History $model) use ($itemRenderer) {
+                return strip_tags($itemRenderer->render($model));
             }
         ]
     ],

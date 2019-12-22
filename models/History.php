@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\traits\ObjectNameTrait;
+use stdClass;
 use Yii;
 
 /**
@@ -62,8 +63,8 @@ class History extends \yii\db\ActiveRecord
             [['event'], 'required'],
             [['message', 'detail'], 'string'],
             [['event', 'object'], 'string', 'max' => 255],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::class, 'targetAttribute' => ['customer_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -90,7 +91,7 @@ class History extends \yii\db\ActiveRecord
      */
     public function getCustomer()
     {
-        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
+        return $this->hasOne(Customer::class, ['id' => 'customer_id']);
     }
 
     /**
@@ -98,7 +99,7 @@ class History extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
@@ -145,7 +146,7 @@ class History extends \yii\db\ActiveRecord
 
     /**
      * @param $attribute
-     * @return null
+     * @return stdClass|null
      */
     public function getDetailChangedAttribute($attribute)
     {
@@ -155,7 +156,7 @@ class History extends \yii\db\ActiveRecord
 
     /**
      * @param $attribute
-     * @return null
+     * @return stdClass|null
      */
     public function getDetailOldValue($attribute)
     {
@@ -165,7 +166,7 @@ class History extends \yii\db\ActiveRecord
 
     /**
      * @param $attribute
-     * @return null
+     * @return stdClass|null
      */
     public function getDetailNewValue($attribute)
     {
@@ -175,7 +176,7 @@ class History extends \yii\db\ActiveRecord
 
     /**
      * @param $attribute
-     * @return null
+     * @return stdClass|null
      */
     public function getDetailData($attribute)
     {

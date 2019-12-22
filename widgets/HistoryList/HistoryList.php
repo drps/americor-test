@@ -2,37 +2,33 @@
 
 namespace app\widgets\HistoryList;
 
-use app\models\search\HistorySearch;
-use app\widgets\Export\Export;
+use Exception;
 use yii\base\Widget;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
-use Yii;
 
 class HistoryList extends Widget
 {
-    public function run()
-    {
-        $model = new HistorySearch();
-
-        return $this->render('main', [
-            'model' => $model,
-            'linkExport' => $this->getLinkExport(),
-            'dataProvider' => $model->search(\Yii::$app->request->queryParams)
-        ]);
-    }
+    public $dataProvider;
+    public $linkExport;
+    public $itemRenderer;
 
     /**
-     * @return string
+     * @throws Exception
      */
-    private function getLinkExport()
+    public function init()
     {
-        $params = \Yii::$app->getRequest()->getQueryParams();
-        $params = ArrayHelper::merge([
-            'exportType' => Export::FORMAT_CSV
-        ], $params);
-        $params[0] = 'site/export';
+        parent::init();
 
-        return Url::to($params);
+        if (!$this->itemRenderer) {
+            throw new Exception('itemRenderer is not set');
+        }
+    }
+
+    public function run()
+    {
+        return $this->render('main', [
+            'linkExport' => $this->linkExport,
+            'dataProvider' => $this->dataProvider,
+            'itemRenderer' => $this->itemRenderer,
+        ]);
     }
 }

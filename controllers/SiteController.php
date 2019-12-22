@@ -2,13 +2,25 @@
 
 namespace app\controllers;
 
+use app\components\HistoryItemRenderer;
 use app\models\search\HistorySearch;
+use app\widgets\Export\Export;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
 class SiteController extends Controller
 {
+    private $historyRenderer;
+
+    public function __construct($id, $module, HistoryItemRenderer $historyRenderer, $params = [])
+    {
+        parent::__construct($id, $module, $params);
+        $this->historyRenderer = $historyRenderer;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -16,7 +28,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -27,7 +39,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -58,12 +70,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'dataProvider' => $this->getDataProvider(),
+            'itemRenderer' => $this->historyRenderer,
+            'linkExport' => $this->getLinkExport(),
+        ]);
     }
 
-
     /**
-     * @param integer $customerId
      * @param string $exportType
      * @return string
      */
@@ -72,9 +86,29 @@ class SiteController extends Controller
         $model = new HistorySearch();
 
         return $this->render('export', [
-            'dataProvider' => $model->search(\Yii::$app->request->queryParams),
+            'dataProvider' => $this->getDataProvider(),
             'exportType' => $exportType,
-            'model' => $model
+            'model' => $model,
+            'itemRenderer' => $this->historyRenderer,
         ]);
+    }
+
+    private function getDataProvider()
+    {
+        return (new HistorySearch())->search(\Yii::$app->request->queryParams);
+    }
+
+    /**
+     * @return string
+     */
+    private function getLinkExport()
+    {
+        $params = \Yii::$app->getRequest()->getQueryParams();
+        $params = ArrayHelper::merge([
+            'exportType' => Export::FORMAT_CSV
+        ], $params);
+        $params[0] = 'site/export';
+
+        return Url::to($params);
     }
 }

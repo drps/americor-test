@@ -59,6 +59,12 @@ $config = [
         ]
     ],
     'params' => $params,
+    'container' => [
+        'definitions' => [
+            'app\components\HistoryItemRenderer' => 'app\components\HistoryItemRenderer',
+        ],
+        'singletons' => [],
+    ],
 ];
 
 if (YII_ENV_DEV) {

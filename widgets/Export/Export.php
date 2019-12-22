@@ -1,10 +1,7 @@
 <?php
 namespace app\widgets\Export;
 
-
-use backend\controllers\ReportsController;
 use kartik\export\ExportMenu;
-use yii\base\ActionEvent;
 
 class Export extends ExportMenu
 {

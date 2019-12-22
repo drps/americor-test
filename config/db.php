@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=americor-test',
-    'username' => 'root',
-    'password' => 'root',
+    'dsn' => 'mysql:host=localhost;dbname=americortest',
+    'username' => 'americor',
+    'password' => '123456',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
